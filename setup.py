@@ -1,7 +1,12 @@
 from setuptools import setup, find_packages
 
 requires = [
-
+    'holidays',
+    'waitress',
+    'pyramid',
+    'uwsgi',
+    'pyramid-openapi3',
+    'openapi-core<=0.13.8'
 ]
 
 test_requirements = [
