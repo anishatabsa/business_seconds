@@ -1,8 +1,7 @@
-[![Build Status](https://magnum.travis-ci.com/TAKEALOT/business_seconds.svg?token=zDUr6qSiwFsZyyUy1s7p&branch=master)](https://magnum.travis-ci.com/TAKEALOT/business_seconds)
 
 # business_seconds
 
-One Paragraph of project description goes here
+This is a Pyramid service which exposes a REST endpoint to get business seconds between a specified start time and end time in ISO format.
 
 ## Getting Started
 
@@ -13,7 +12,9 @@ These instructions will get you a copy of the project up and running on your loc
 What things you need to install the software and how to install them
 
 ```
-Give examples
+Python 3.7.2
+waitress
+pyramid
 ```
 
 ### Installing and running the service
@@ -27,34 +28,29 @@ $ source venv/bin/activate
 ```
 2. Upgrade packaging tools.
 ```
-$ pip install --upgrade pip setuptools
+$ pip install --upgrade pip -e .
 ```
-3. Install all our requirements.
+3. Execute the following script file.
+This script should run the pserve command which will run a local Http server using waitress. Once you see the message  Serving on http://0.0.0.0:7000, you will be able to access the endpoint using http://localhost:7000/get_business_seconds?start_time=2021-06-16T17:20:47&end_time=2021-06-17T10:26:47 
 ```
-$ pip install -e ".[test]"
-```
-
-4. Build your project
-```
-eval $(minikube docker-env)
-docker build -t image-registry.ci.env:80/takealot/business_seconds:master -f Dockerfile .
+./scripts/deploy.sh"
 ```
 
-5. Run your project in kubernetes.
-```
-helm install -n business_seconds --set dev.patch=true,dev.hostPath=$PWD charts/business_seconds
-```
 
 End with an example of getting some data out of the system or using it for a little demo
+```
+URL: http://localhost:7000/get_business_seconds?start_time=2021-06-16T17:20:47&end_time=2021-06-17T10:26:47
+Method: GET
+Query Parameters:
+start_time = 2021-06-16T17:20:47
+end_time = 2021-06-17T10:26:47
 
+Reponse:
+{
+    "business_seconds": 8807
+}
+```
 ## Running the tests
-
-Explain how to run the automated tests for this system
-
-```
-export ROLE=TEST
-py.test --cov=business_seconds tests/
-```
 
 ### Interacting with the service
 Using a generated bravado client
@@ -68,14 +64,9 @@ result = business_seconds_client.hello.get_hello(target='what').result()
 ```
 Using curl
 ```bash
-curl http://localhost:7000/hello/what
+curl http://localhost:7000/get_business_seconds?start_time=2021-06-16T17:20:47&end_time=2021-06-17T10:26:47
 ```
 
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-## Built With
 
 * [Pyramid](http://docs.pylonsproject.org/projects/pyramid/en/latest/) - The web framework used
 * [Swagger](http://swagger.io/) - API description
