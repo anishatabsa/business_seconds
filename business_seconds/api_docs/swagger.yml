@@ -1,0 +1,79 @@
+openapi: 3.0.1
+info:
+  description: Pyramid service to calculate business seconds which would accept start time and end time in ISO format
+  title: Business_seconds REST API
+  version: "0.0.1"
+servers:
+  - url: /
+paths:
+  /get_business_seconds:
+    get:
+      tags:
+        - get_business_seconds
+      summary: Get business seconds
+      description: Get business seconds between given start time and end time
+      operationId: get_business_seconds
+      parameters:
+        - name: start_time
+          in: query
+          description: Start Time in ISO format
+          required: true
+          schema:
+            type: string
+        - name: end_time
+          in: query
+          description: End Time in ISO format
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HelloGet'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    HealthCheck:
+      type: "object"
+    HelloGet:
+      type: "object"
+      properties:
+        result_string:
+          type: "string"
+    HelloPost:
+      type: "object"
+      required:
+        - friends
+      properties:
+        friends:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Friend"
+    Error:
+      type: "object"
+      properties:
+        fields:
+          type: "string"
+        message:
+          type: "string"
+        status:
+          format: "int32"
+          type: "integer"
+    Friend:
+      type: "object"
+      required:
+        - name
+        - gender
+      properties:
+        name:
+          type: "string"
+        gender:
+          type: "string"

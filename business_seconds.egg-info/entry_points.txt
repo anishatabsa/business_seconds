@@ -1,0 +1,6 @@
+[console_scripts]
+initialize = business_seconds.initialize_db:initialize
+
+[paste.app_factory]
+business_seconds = business_seconds.server:business_seconds_server
+

@@ -1,0 +1,13 @@
+Metadata-Version: 2.1
+Name: business-seconds
+Version: 0.0.1
+Summary: Pyramid service to calculate business seconds which would accept start time and end time in ISO format
+Home-page: https://github.com/anishatabsa/recomed_business_seconds
+Author: Anish
+Author-email: anishatabsa@gmail.com
+License: UNKNOWN
+Description: UNKNOWN
+Keywords: web wsgi pyramid swagger
+Platform: UNKNOWN
+Classifier: Programming Language :: Python
+Provides-Extra: test
