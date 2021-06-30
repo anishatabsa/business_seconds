@@ -7,6 +7,7 @@ pserve ./configuration/pyramid/development.ini --reload
 uwsgi --ini-paste ./configuration/pyramid/development.ini
 """
 import logging
+
 import pkg_resources
 from pyramid.config import Configurator
 
@@ -32,7 +33,9 @@ def business_seconds_server(global_config, **settings):
 
     # Hook a controller to the registry
     # config.registry.controller = c.Controller()
-    config.registry.business_controller = business_seconds_controller.BusinessSecondsController()
+    config.registry.business_controller = (
+        business_seconds_controller.BusinessSecondsController()
+    )
     # Set service version
     config.registry.settings['service_version'] = version
 

@@ -1,19 +1,31 @@
 import logging
-import holidays
-
 from datetime import datetime, timedelta
 from typing import List
+
+import holidays
 
 
 class BusinessSecondsController:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
-        self.start_date: datetime = datetime.strptime('19000101000000', '%Y%m%d%H%M%S')
-        self.start_date_begin: datetime = datetime.strptime('19000101000000', '%Y%m%d%H%M%S')
-        self.start_date_closure: datetime = datetime.strptime('19000101000000', '%Y%m%d%H%M%S')
-        self.end_date: datetime = datetime.strptime('29991231235959', '%Y%m%d%H%M%S')
-        self.end_date_begin: datetime = datetime.strptime('19000101000000', '%Y%m%d%H%M%S')
-        self.end_date_closure: datetime = datetime.strptime('19000101000000', '%Y%m%d%H%M%S')
+        self.start_date: datetime = datetime.strptime(
+            '19000101000000', '%Y%m%d%H%M%S'
+        )
+        self.start_date_begin: datetime = datetime.strptime(
+            '19000101000000', '%Y%m%d%H%M%S'
+        )
+        self.start_date_closure: datetime = datetime.strptime(
+            '19000101000000', '%Y%m%d%H%M%S'
+        )
+        self.end_date: datetime = datetime.strptime(
+            '29991231235959', '%Y%m%d%H%M%S'
+        )
+        self.end_date_begin: datetime = datetime.strptime(
+            '19000101000000', '%Y%m%d%H%M%S'
+        )
+        self.end_date_closure: datetime = datetime.strptime(
+            '19000101000000', '%Y%m%d%H%M%S'
+        )
 
     def business_seconds(self, start: datetime, end: datetime):
         """
@@ -30,28 +42,30 @@ class BusinessSecondsController:
         self.start_date_begin = datetime.strptime(
             f'{start.year}{start.month}'
             f'{start.day if len(str(start.day)) > 1 else f"0{start.day}"}080000',
-            '%Y%m%d%H%M%S'
+            '%Y%m%d%H%M%S',
         )
         self.start_date_closure = datetime.strptime(
             f'{start.year}{start.month}'
             f'{start.day if len(str(start.day)) > 1 else f"0{start.day}"}170000',
-            '%Y%m%d%H%M%S'
+            '%Y%m%d%H%M%S',
         )
         self.end_date_begin = datetime.strptime(
             f'{end.year}{end.month}'
             f'{end.day if len(str(end.day)) > 1 else f"0{end.day}"}080000',
-            '%Y%m%d%H%M%S'
+            '%Y%m%d%H%M%S',
         )
         self.end_date_closure = datetime.strptime(
             f'{end.year}{end.month}'
             f'{end.day if len(str(end.day)) > 1 else f"0{end.day}"}170000',
-            '%Y%m%d%H%M%S'
+            '%Y%m%d%H%M%S',
         )
         self.start_date: datetime = start - timedelta(days=1)
         self.end_date: datetime = end
         holiday = self.holidays(self.start_date, self.end_date)
         business_days = self.calculate_business_days(holiday)
-        business_seconds = self.calculate_business_seconds(business_days, holiday)
+        business_seconds = self.calculate_business_seconds(
+            business_days, holiday
+        )
 
         return business_seconds
 
@@ -61,15 +75,16 @@ class BusinessSecondsController:
         #     return business_secs
         next_working_day = self.calculate_working_day('start', holiday)
         prev_working_day = self.calculate_working_day('end', holiday)
-        total_seconds = self.calculate_total_seconds(next_working_day,
-                                                     prev_working_day,
-                                                     holiday)
+        total_seconds = self.calculate_total_seconds(
+            next_working_day, prev_working_day, holiday
+        )
 
         return total_seconds
 
     @staticmethod
-    def calculate_total_seconds(start_date: datetime, end_date: datetime,
-                                holiday: dict):
+    def calculate_total_seconds(
+        start_date: datetime, end_date: datetime, holiday: dict
+    ):
         if end_date < start_date:
             return 0
 
@@ -79,8 +94,10 @@ class BusinessSecondsController:
         non_bus_days_sec = total_days * 15 * 60 * 60
 
         if end_date.date() > start_date.date():
-            total_seconds = total_seconds - non_bus_days_sec - (
-                    total_holidays * 9 * 60 * 60
+            total_seconds = (
+                total_seconds
+                - non_bus_days_sec
+                - (total_holidays * 9 * 60 * 60)
             )
 
         return total_seconds
@@ -111,7 +128,9 @@ class BusinessSecondsController:
                 if end_date < self.end_date_begin:
                     next_day = next_day - timedelta(days=1)
                     next_day = self.calc_next_day(next_day, 'end')
-                if (next_day - end_date).total_seconds() > 32400 and not end_date.date() == next_day.date():
+                if (
+                    next_day - end_date
+                ).total_seconds() > 32400 and not end_date.date() == next_day.date():
                     next_day = next_day - timedelta(days=1)
                     next_day = self.calc_next_day(next_day, 'end')
                 else:
@@ -119,13 +138,17 @@ class BusinessSecondsController:
 
         return next_day
 
-    def calc_next_day(self, date_value: datetime, date_type: str, check_holiday=True):
+    def calc_next_day(
+        self, date_value: datetime, date_type: str, check_holiday=True
+    ):
         next_day = date_value
 
         while check_holiday:
-            check_holiday = True if 1 in list(self.check_holiday(
-                [next_day]
-            ).values()) else False
+            check_holiday = (
+                True
+                if 1 in list(self.check_holiday([next_day]).values())
+                else False
+            )
 
             if not check_holiday:
                 break
@@ -135,7 +158,7 @@ class BusinessSecondsController:
                     next_day = datetime.strptime(
                         f'{next_day.year}{next_day.month}'
                         f'{next_day.day if len(str(next_day.day)) > 1 else f"0{next_day.day}"}080000',
-                        '%Y%m%d%H%M%S'
+                        '%Y%m%d%H%M%S',
                     )
                     next_day = next_day + timedelta(days=1)
 
@@ -144,7 +167,7 @@ class BusinessSecondsController:
                     next_day = datetime.strptime(
                         f'{next_day.year}{next_day.month}'
                         f'{next_day.day if len(str(next_day.day)) > 1 else f"0{next_day.day}"}170000',
-                        '%Y%m%d%H%M%S'
+                        '%Y%m%d%H%M%S',
                     )
                     next_day = next_day - timedelta(days=1)
 
@@ -172,8 +195,8 @@ class BusinessSecondsController:
                 pub += 1
 
         return {
-            "public": pub,
-            "weekend": weekend,
+            'public': pub,
+            'weekend': weekend,
         }
 
     def holidays(self, start_date: datetime, end_date: datetime):
@@ -187,12 +210,20 @@ class BusinessSecondsController:
             diff_days -= 1
 
         check_holidays = self.check_holiday(dates_in_between)
-        start_hol = True if 1 in list(self.check_holiday([start_date + timedelta(days=1)]).values()) else False
-        end_hol = True if 1 in list(self.check_holiday([end_date]).values()) else False
+        start_hol = (
+            True
+            if 1
+            in list(
+                self.check_holiday([start_date + timedelta(days=1)]).values()
+            )
+            else False
+        )
+        end_hol = (
+            True
+            if 1 in list(self.check_holiday([end_date]).values())
+            else False
+        )
 
-        check_holidays.update({
-            "start_hol": start_hol,
-            "end_hol": end_hol
-        })
+        check_holidays.update({'start_hol': start_hol, 'end_hol': end_hol})
 
         return check_holidays

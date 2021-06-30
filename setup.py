@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 requires = [
     'holidays',
@@ -6,19 +6,17 @@ requires = [
     'pyramid',
     'uwsgi',
     'pyramid-openapi3',
-    'openapi-core<=0.13.8'
+    'openapi-core<=0.13.8',
 ]
 
-test_requirements = [
-
-]
+test_requirements = []
 
 setup_args = {
     'name': 'business_seconds',
     'version': '0.0.1',
     'description': 'Pyramid service to calculate business seconds which would accept start time and end time in ISO format',
     'classifiers': [
-        "Programming Language :: Python",
+        'Programming Language :: Python',
     ],
     'author': 'Anish',
     'author_email': 'anishatabsa@gmail.com',
@@ -35,7 +33,7 @@ setup_args = {
         'business_seconds': [
             'configuration/pyramid/*',
             'configuration/*',
-            'api_docs/*'
+            'api_docs/*',
         ]
     },
     'entry_points': {
@@ -45,7 +43,7 @@ setup_args = {
         'console_scripts': [
             'initialize=business_seconds.initialize_db:initialize',
         ],
-    }
+    },
 }
 
 setup(**setup_args)
