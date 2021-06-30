@@ -22,7 +22,7 @@ setup_args = {
     ],
     'author': 'Anish',
     'author_email': 'anishatabsa@gmail.com',
-    'url': 'https://github.com/anishatabsa/recomed_business_seconds',
+    'url': 'https://github.com/anishatabsa/business_seconds',
     'keywords': 'web wsgi pyramid swagger',
     'packages': find_packages(),
     'include_package_data': True,
